@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "build": "esbuild --bundle --platform=node --outfile=dist/schema-extractor.js src/index.ts",
+    "start": "ts-node src/index.ts"
+  },
   "devDependencies": {
     "@types/node": "^18.13.0",
     "@types/yargs": "^17.0.22",
