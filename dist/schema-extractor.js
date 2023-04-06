@@ -5002,7 +5002,7 @@ function extract(_0, _1) {
           trimmedResourceSchemas[resource] = resource_schemas[resource];
         }
       }
-      if (Object.keys(trimmedResourceSchemas).length === 0) {
+      if (resources.length > 0 && Object.keys(trimmedResourceSchemas).length === 0) {
         throw new Error("No resources found with filter: " + resources.join(" || "));
       }
       if (dataSources.length === 1 && dataSources[0] === "*") {
@@ -5012,7 +5012,7 @@ function extract(_0, _1) {
           trimmedDataSourceSchemas[dataSource] = data_source_schemas[dataSource];
         }
       }
-      if (Object.keys(trimmedDataSourceSchemas).length === 0) {
+      if (dataSources.length > 0 && Object.keys(trimmedDataSourceSchemas).length === 0) {
         throw new Error("No data sources found with filter: " + dataSources.join(" || "));
       }
       const trimmedSchema = {

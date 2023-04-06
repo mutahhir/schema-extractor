@@ -152,7 +152,7 @@ export async function extract(
       }
     }
 
-    if (Object.keys(trimmedResourceSchemas).length === 0) {
+    if (resources.length > 0 && Object.keys(trimmedResourceSchemas).length === 0) {
       throw new Error("No resources found with filter: " + resources.join(" || "));
     }
 
@@ -164,7 +164,7 @@ export async function extract(
       }
     }
 
-    if (Object.keys(trimmedDataSourceSchemas).length === 0) {
+    if (dataSources.length > 0 && Object.keys(trimmedDataSourceSchemas).length === 0) {
       throw new Error("No data sources found with filter: " + dataSources.join(" || "));
     }
 
