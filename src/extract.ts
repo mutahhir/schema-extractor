@@ -48,7 +48,7 @@ function spawnTerraformSchema(cwd: string) {
   });
 }
 
-function spawnTerraformInit(cwd: string, args: string[]) {
+function spawnTerraformInit(cwd: string) {
   return new Promise<void>(async (resolve, reject) => {
     const tf = spawn("terraform", ["init"], {
       cwd,
@@ -131,7 +131,7 @@ export async function extract(
       "utf-8"
     );
 
-    await spawnTerraformInit(tfFolder, []);
+    await spawnTerraformInit(tfFolder);
     const schema = await spawnTerraformSchema(tfFolder);
 
     const parsedSchema = JSON.parse(schema);
@@ -152,12 +152,20 @@ export async function extract(
       }
     }
 
+    if (Object.keys(trimmedResourceSchemas).length === 0) {
+      throw new Error("No resources found with filter: " + resources.join(" || "));
+    }
+
     if (dataSources.length === 1 && dataSources[0] === "*") {
       trimmedDataSourceSchemas = data_source_schemas;
     } else {
       for (var dataSource of dataSources) {
         trimmedDataSourceSchemas[dataSource] = data_source_schemas[dataSource];
       }
+    }
+
+    if (Object.keys(trimmedDataSourceSchemas).length === 0) {
+      throw new Error("No data sources found with filter: " + dataSources.join(" || "));
     }
 
     const trimmedSchema = {

@@ -4916,7 +4916,7 @@ function spawnTerraformSchema(cwd) {
     });
   }));
 }
-function spawnTerraformInit(cwd, args) {
+function spawnTerraformInit(cwd) {
   return new Promise((resolve5, reject) => __async(this, null, function* () {
     const tf = (0, import_child_process.spawn)("terraform", ["init"], {
       cwd
@@ -4987,7 +4987,7 @@ function extract(_0, _1) {
     `,
         "utf-8"
       );
-      yield spawnTerraformInit(tfFolder, []);
+      yield spawnTerraformInit(tfFolder);
       const schema = yield spawnTerraformSchema(tfFolder);
       const parsedSchema = JSON.parse(schema);
       const { provider_schemas, format_version } = parsedSchema;
@@ -5002,12 +5002,18 @@ function extract(_0, _1) {
           trimmedResourceSchemas[resource] = resource_schemas[resource];
         }
       }
+      if (Object.keys(trimmedResourceSchemas).length === 0) {
+        throw new Error("No resources found with filter: " + resources.join(" || "));
+      }
       if (dataSources.length === 1 && dataSources[0] === "*") {
         trimmedDataSourceSchemas = data_source_schemas;
       } else {
         for (var dataSource of dataSources) {
           trimmedDataSourceSchemas[dataSource] = data_source_schemas[dataSource];
         }
+      }
+      if (Object.keys(trimmedDataSourceSchemas).length === 0) {
+        throw new Error("No data sources found with filter: " + dataSources.join(" || "));
       }
       const trimmedSchema = {
         format_version,
