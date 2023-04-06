@@ -138,18 +138,26 @@ export async function extract(
 
     const { provider_schemas, format_version } = parsedSchema;
     const providerSchemaName = Object.keys(provider_schemas)[0];
-    const { provider, resource_schemas, data_source_schemas } =
+    const { resource_schemas, data_source_schemas } =
       provider_schemas[providerSchemaName];
 
-    const trimmedResourceSchemas: any = {};
-    const trimmedDataSourceSchemas: any = {};
+    let trimmedResourceSchemas: any = {};
+    let trimmedDataSourceSchemas: any = {};
 
-    for (var resource of resources) {
-      trimmedResourceSchemas[resource] = resource_schemas[resource];
+    if (resources.length === 1 && resources[0] === "*") {
+      trimmedResourceSchemas = resource_schemas;
+    } else {
+      for (var resource of resources) {
+        trimmedResourceSchemas[resource] = resource_schemas[resource];
+      }
     }
 
-    for (var dataSource of dataSources) {
-      trimmedDataSourceSchemas[dataSource] = data_source_schemas[dataSource];
+    if (dataSources.length === 1 && dataSources[0] === "*") {
+      trimmedDataSourceSchemas = data_source_schemas;
+    } else {
+      for (var dataSource of dataSources) {
+        trimmedDataSourceSchemas[dataSource] = data_source_schemas[dataSource];
+      }
     }
 
     const trimmedSchema = {

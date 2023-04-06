@@ -22,13 +22,13 @@ import { extract } from "./extract";
         alias: "r",
         type: "array",
         description:
-          "The resources to extract. Defaults to none. Required either this or data.",
+          "The resources to extract. Defaults to none. Required either this or data. Pass '*' to extract all resources.",
       },
       data: {
         alias: "d",
         type: "array",
         description:
-          "The data sources to extract. Defaults to none. Required either this or data.",
+          "The data sources to extract. Defaults to none. Required either this or data. Pass '*' to extract all data sources.",
       },
       out: {
         alias: "o",

@@ -4992,14 +4992,22 @@ function extract(_0, _1) {
       const parsedSchema = JSON.parse(schema);
       const { provider_schemas, format_version } = parsedSchema;
       const providerSchemaName = Object.keys(provider_schemas)[0];
-      const { provider, resource_schemas, data_source_schemas } = provider_schemas[providerSchemaName];
-      const trimmedResourceSchemas = {};
-      const trimmedDataSourceSchemas = {};
-      for (var resource of resources) {
-        trimmedResourceSchemas[resource] = resource_schemas[resource];
+      const { resource_schemas, data_source_schemas } = provider_schemas[providerSchemaName];
+      let trimmedResourceSchemas = {};
+      let trimmedDataSourceSchemas = {};
+      if (resources.length === 1 && resources[0] === "*") {
+        trimmedResourceSchemas = resource_schemas;
+      } else {
+        for (var resource of resources) {
+          trimmedResourceSchemas[resource] = resource_schemas[resource];
+        }
       }
-      for (var dataSource of dataSources) {
-        trimmedDataSourceSchemas[dataSource] = data_source_schemas[dataSource];
+      if (dataSources.length === 1 && dataSources[0] === "*") {
+        trimmedDataSourceSchemas = data_source_schemas;
+      } else {
+        for (var dataSource of dataSources) {
+          trimmedDataSourceSchemas[dataSource] = data_source_schemas[dataSource];
+        }
       }
       const trimmedSchema = {
         format_version,
@@ -5042,12 +5050,12 @@ function extract(_0, _1) {
     resources: {
       alias: "r",
       type: "array",
-      description: "The resources to extract. Defaults to none. Required either this or data."
+      description: "The resources to extract. Defaults to none. Required either this or data. Pass '*' to extract all resources."
     },
     data: {
       alias: "d",
       type: "array",
-      description: "The data sources to extract. Defaults to none. Required either this or data."
+      description: "The data sources to extract. Defaults to none. Required either this or data. Pass '*' to extract all data sources."
     },
     out: {
       alias: "o",
